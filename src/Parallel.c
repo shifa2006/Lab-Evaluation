@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <omp.h>
+
+int main() {
+    int N = 10000000;
+
+    int *A = malloc(N * sizeof(int));
+    int *B = malloc(N * sizeof(int));
+    int *C = malloc(N * sizeof(int));
+
+    if (A == NULL || B == NULL || C == NULL) {
+        printf("Memory allocation failed\n");
+        return 1;
+    }
+
+    for (int i = 0; i < N; i++) {
+        A[i] = i;
+        B[i] = i * 2;
+    }double start = omp_get_wtime();
+
+    #pragma omp parallel for num_threads(8)
+    for (int i = 0; i < N; i++) {
+        C[i] = A[i] + B[i];
+    }
+
+    double end = omp_get_wtime();
+
+    printf("Parallel Vector Addition using OpenMP\n");
+    printf("Vector Size: %d\n", N);
+    printf("Threads Used: 8\n");
+    printf("Execution Time: %.6f seconds\n", end - start);
+    printf("First Result: C[0] = %d\n", C[0]);
+    printf("Last Result: C[%d] = %d\n", N - 1, C[N - 1]);
+
+    free(A);
+    free(B);
+    free(C);
+
+    return 0;
+}
