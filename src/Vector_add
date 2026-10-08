@@ -14,11 +14,15 @@ int main() {
         return 1;
     }
 
+    // Initialize vectors
     for (int i = 0; i < N; i++) {
         A[i] = i;
         B[i] = i * 2;
-    }double start = omp_get_wtime();
+    }
 
+    double start = omp_get_wtime();
+
+    // Parallel vector addition
     #pragma omp parallel for num_threads(8)
     for (int i = 0; i < N; i++) {
         C[i] = A[i] + B[i];
